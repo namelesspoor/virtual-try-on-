@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ImageUpload } from './components/ImageUpload';
 import { ResultDisplay } from './components/ResultDisplay';
 import { Header } from './components/Header';
@@ -12,6 +12,26 @@ const App: React.FC = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingStep, setLoadingStep] = useState<string>('');
+
+  const loadingSteps = [
+    '1. 正在分析您的身形...',
+    '2. 正在为您穿上新衣...',
+    '3. 正在调整光影效果...',
+  ];
+
+  useEffect(() => {
+    if (isLoading) {
+      let stepIndex = 0;
+      setLoadingStep(loadingSteps[stepIndex]);
+      const interval = setInterval(() => {
+        stepIndex = (stepIndex + 1) % loadingSteps.length;
+        setLoadingStep(loadingSteps[stepIndex]);
+      }, 3000); // Cycle every 3 seconds
+      return () => clearInterval(interval);
+    }
+  }, [isLoading]);
+
 
   const handleTryOn = useCallback(async () => {
     if (!personImage || !clothingImage) {
@@ -66,7 +86,7 @@ const App: React.FC = () => {
               disabled={!personImage || !clothingImage || isLoading}
               className="group flex items-center justify-center gap-3 px-8 py-4 bg-indigo-600 text-white font-bold rounded-full shadow-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300"
             >
-              {isLoading ? 'Generating Your Look...' : 'Virtually Try On'}
+              {isLoading ? '生成中...' : '虚拟试穿'}
               {!isLoading && <ArrowRightIcon />}
             </button>
           </div>
@@ -75,6 +95,7 @@ const App: React.FC = () => {
             isLoading={isLoading}
             error={error}
             generatedImage={generatedImage}
+            loadingMessage={loadingStep}
           />
         </div>
       </main>

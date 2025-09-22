@@ -6,13 +6,14 @@ interface ResultDisplayProps {
   isLoading: boolean;
   error: string | null;
   generatedImage: string | null;
+  loadingMessage?: string;
 }
 
-const LoadingState: React.FC = () => (
+const LoadingState: React.FC<{ message: string }> = ({ message }) => (
   <div className="flex flex-col items-center justify-center text-center p-8 bg-indigo-50 rounded-lg">
     <LoadingSpinner />
-    <p className="mt-4 text-lg font-semibold text-indigo-700">Our virtual stylist is at work...</p>
-    <p className="text-sm text-indigo-500">This might take a moment.</p>
+    <p className="mt-4 text-lg font-semibold text-indigo-700">{message}</p>
+    <p className="text-sm text-indigo-500">这可能需要一点时间。</p>
   </div>
 );
 
@@ -40,15 +41,15 @@ const GeneratedImageState: React.FC<{ src: string }> = ({ src }) => (
 const InitialState: React.FC = () => (
     <div className="text-center p-8 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
         <h4 className="text-lg font-medium text-gray-700">Your Result Will Appear Here</h4>
-        <p className="text-gray-500 mt-1">Upload your photos and click "Virtually Try On" to see the magic happen.</p>
+        <p className="text-gray-500 mt-1">Upload your photos and click the button to see the magic happen.</p>
     </div>
 );
 
 
-export const ResultDisplay: React.FC<ResultDisplayProps> = ({ isLoading, error, generatedImage }) => {
+export const ResultDisplay: React.FC<ResultDisplayProps> = ({ isLoading, error, generatedImage, loadingMessage }) => {
   return (
     <div className="w-full min-h-[200px] flex items-center justify-center">
-      {isLoading && <LoadingState />}
+      {isLoading && <LoadingState message={loadingMessage || '虚拟设计师工作中...'} />}
       {error && !isLoading && <ErrorState message={error} />}
       {generatedImage && !isLoading && !error && <GeneratedImageState src={generatedImage} />}
       {!isLoading && !error && !generatedImage && <InitialState />}

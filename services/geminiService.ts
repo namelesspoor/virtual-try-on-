@@ -39,7 +39,7 @@ export const generateTryOnImage = async (personImageFile: File, clothingImageFil
   };
 
   const textPart = {
-    text: "Take the person from the first image and the clothing from the second image. Generate a new image showing the person realistically wearing the clothing item.",
+    text: "You will be provided with two images. One contains a person and the other contains an article of clothing. Your task is to first identify which image contains the person and which contains the clothing. Then, identify the category of the clothing item (e.g., t-shirt, jacket, dress) to determine where on the person's body it should be placed. Finally, create a new, highly photorealistic image of the person wearing the clothing. Pay close attention to the material texture of the garment, the interplay of light and shadow, and the natural folds and wrinkles as the fabric conforms to the person's body shape. The final output must be a high-quality image showing the person naturally wearing the garment. Do not include any text in the output image.",
   };
 
   try {
